@@ -6,6 +6,7 @@ class IngredientSerializer(serializers.Serializer):
     id = serializers.ReadOnlyField()
     name = serializers.CharField(max_length=200)
     description = serializers.CharField(max_length=1000)
+    image = serializers.URLField()
 
     def create(self, validated_data):
         return Ingredient.objects.create(**validated_data)
@@ -31,6 +32,7 @@ class CocktailSerializer(serializers.Serializer):
     instructions = serializers.CharField(max_length=1000)
     glass = serializers.CharField(max_length=200)
     is_popular = serializers.BooleanField()
+    is_alcoholic = serializers.BooleanField(default=True)
     ingredients = serializers.SlugRelatedField(
         many=True, required=False,  slug_field='name', queryset=Ingredient.objects.all())
 
