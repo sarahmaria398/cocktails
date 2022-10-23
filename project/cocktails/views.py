@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+import random
 
 
 from .models import Cocktail, Ingredient
@@ -154,3 +155,12 @@ class CocktailIngredients(APIView):
         return Response(
             status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class CocktailRandom(APIView):
+
+    def get(self, request):
+        id = random.randint(1, len(Cocktail.objects.all()))
+        cocktail = Cocktail.objects.get(pk=id)
+        serializer = CocktailSerializer(cocktail)
+        return Response(serializer.data)

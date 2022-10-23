@@ -8,8 +8,9 @@ urlpatterns = [
     path('ingredients/', views.IngredientList.as_view()),
     path('ingredients/<int:pk>', views.IngredientDetail.as_view()),
     path('cocktails/ingredients/<str:id1>/<str:id2>',
-         views.CocktailIngredients.as_view())
+         views.CocktailIngredients.as_view()),
     #  parameter #1 is the ingredient id and param #2 is the cocktail id
+    path('cocktails/random', views.CocktailRandom.as_view()),
 ]
 
 
