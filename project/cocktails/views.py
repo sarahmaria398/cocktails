@@ -1,5 +1,7 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+
+
 from .models import Cocktail, Ingredient
 from .serializers import CocktailSerializer, CocktailDetailSerializer, IngredientDetailSerializer, IngredientSerializer
 from django.http import Http404
@@ -20,6 +22,27 @@ class IngredientDetail(APIView):
         ingredient = self.get_object(pk)
         serializer = IngredientDetailSerializer(ingredient)
         return Response(serializer.data)
+
+    def put(self, request, pk):
+        ingredient = self.get_object(pk)
+        data = request.data
+        serializer = IngredientDetailSerializer(
+            instance=ingredient,
+            data=data,
+            partial=True
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                serializer.data,
+                status=status.HTTP_200_OK
+            )
+
+        return Response(
+            serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
 
 class IngredientList(APIView):
@@ -90,5 +113,44 @@ class CocktailDetail(APIView):
 
         return Response(
             serializer.errors,
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+
+class CocktailIngredients(APIView):
+
+    def get_object(self, id1):
+        try:
+            ingredient = Ingredient.objects.get(pk=id1)
+            return ingredient
+        except Ingredient.DoesNotExist:
+            raise Http404
+
+    def get_object_cocktail(self, id2):
+        try:
+            cocktail = Cocktail.objects.get(pk=id2)
+            return cocktail
+        except Cocktail.DoesNotExist:
+            raise Http404
+
+    def post(self, request, id1, id2):
+        ingredient = self.get_object(id1)
+        cocktail = self.get_object_cocktail(id2)
+
+        if ingredient not in cocktail.ingredients.all():
+            cocktail.ingredients.add(ingredient)
+            return Response(status=status.HTTP_201_CREATED)
+        return Response(
+            status=status.HTTP_400_BAD_REQUEST
+        )
+
+    def delete(self, request, id1, id2):
+        ingredient = self.get_object(id1)
+        cocktail = self.get_object_cocktail(id2)
+
+        if ingredient in cocktail.ingredients.all():
+            cocktail.ingredients.remove(ingredient)
+            return Response(status.HTTP_200_OK)
+        return Response(
             status=status.HTTP_400_BAD_REQUEST
         )
