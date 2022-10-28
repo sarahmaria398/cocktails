@@ -35,6 +35,9 @@ class CocktailSerializer(serializers.Serializer):
     is_alcoholic = serializers.BooleanField(default=True)
     ingredients = serializers.SlugRelatedField(
         many=True, required=False,  slug_field='name', queryset=Ingredient.objects.all())
+    # ingredients = serializers.
+    # foriegn key 
+    # ingredients = serializers.ReadOnlyField(source='ingredients.id')
 
     def create(self, validated_data):
         return Cocktail.objects.create(**validated_data)

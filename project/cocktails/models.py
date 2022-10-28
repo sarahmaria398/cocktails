@@ -11,6 +11,12 @@ class Cocktail(models.Model):
     is_alcoholic = models.BooleanField(default=True)
     ingredients = models.ManyToManyField(
         'Ingredient', related_name='ingredient', blank=True)
+    # ingredients = models.ForeignKey(
+    #     'Ingredient',  
+    #     on_delete=models.CASCADE, 
+    #     related_name='ingredient',
+    #     blank=True
+    #     )
 
 
 class Ingredient(models.Model):

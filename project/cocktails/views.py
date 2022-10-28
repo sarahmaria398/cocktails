@@ -9,6 +9,8 @@ from django.http import Http404
 from rest_framework import status
 
 
+
+
 class IngredientDetail(APIView):
 
     def get_object(self, pk):
@@ -162,5 +164,18 @@ class CocktailRandom(APIView):
     def get(self, request):
         id = random.randint(1, len(Cocktail.objects.all()))
         cocktail = Cocktail.objects.get(pk=id)
+        serializer = CocktailSerializer(cocktail)
+        return Response(serializer.data)
+
+class CocktailName(APIView):
+
+    def get_object(self, name):
+        try:
+            return Cocktail.objects.get(name=name)
+        except Cocktail.DoesNotExist:
+            raise Http404
+    
+    def get(self, request, name):
+        cocktail = self.get_object(name)
         serializer = CocktailSerializer(cocktail)
         return Response(serializer.data)
