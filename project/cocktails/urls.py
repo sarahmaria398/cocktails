@@ -4,14 +4,24 @@ from . import views
 
 urlpatterns = [
     path('cocktails/', views.CocktailList.as_view()),
+    # returns list of all cocktails
     path('cocktails/<int:pk>', views.CocktailDetail.as_view()),
+    # returns single cocktail by id
     path('ingredients/', views.IngredientList.as_view()),
+    # returns list of all ingredients
     path('ingredients/<int:pk>', views.IngredientDetail.as_view()),
+    # returns single ingredient by id
     path('cocktails/ingredients/<str:id1>/<str:id2>',
          views.CocktailIngredients.as_view()),
-    #  parameter #1 is the ingredient id and param #2 is the cocktail id
+    #  parameter #1 is the ingredient id and param #2 is the cocktail id, adds or removes an ingredient from a cocktail
     path('cocktails/random', views.CocktailRandom.as_view()),
-    path('cocktails/<str:name>', views.CocktailName.as_view())
+    # returns a random cocktail
+    path('cocktails/<str:name>', views.CocktailByName.as_view()),
+    # returns cocktail by its name
+    path('ingredients/<str:name>', views.IngredientByName.as_view()),
+    # returns ingredient by its name
+    # path('cocktails/<str:letter>', views.IngredientByName.as_view())
+
 ]
 
 

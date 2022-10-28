@@ -18,6 +18,7 @@ class IngredientDetailSerializer(IngredientSerializer):
         instance.name = validated_data.get('name', instance.name)
         instance.description = validated_data.get(
             'description', instance.description)
+        instance.image = validated_data.get('image', instance.image)
         instance.save()
         return instance
 
@@ -33,11 +34,7 @@ class CocktailSerializer(serializers.Serializer):
     glass = serializers.CharField(max_length=200)
     is_popular = serializers.BooleanField()
     is_alcoholic = serializers.BooleanField(default=True)
-    ingredients = serializers.SlugRelatedField(
-        many=True, required=False,  slug_field='name', queryset=Ingredient.objects.all())
-    # ingredients = serializers.
-    # foriegn key 
-    # ingredients = serializers.ReadOnlyField(source='ingredients.id')
+    ingredients = IngredientSerializer(many=True)
 
     def create(self, validated_data):
         return Cocktail.objects.create(**validated_data)
