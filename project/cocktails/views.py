@@ -192,3 +192,35 @@ class IngredientByName(APIView):
         ingredient = self.get_object(name)
         serializer = IngredientSerializer(ingredient)
         return Response(serializer.data)
+
+
+# class CocktailByLetter(APIView):
+
+    #     def get_object(self, name):
+    #     try:
+    #         return Cocktail.objects.get(name=name)
+    #     except Cocktail.DoesNotExist:
+    #         raise Http404
+
+    # def get(self, request, name):
+    #     cocktail = self.get_object(name)
+    #     serializer = CocktailSerializer(cocktail)
+    #     return Response(serializer.data)
+
+    # def get(self, request, letter):
+    #     cocktails = Cocktail.objects.filter('name').value()
+    #     # select = Cocktail.objects.get(cocktails=letter)
+    #     serializer = CocktailSerializer(cocktails, many=True)
+    #     return Response(serializer.data)
+
+    # def get(self, request):
+    #     cocktails = Cocktail.objects.all()
+    #     serializer = CocktailSerializer(cocktails, many=True)
+    #     return Response(serializer.data)
+
+class PopularCocktailList(APIView):
+
+    def get(self, request):
+        cocktails = Cocktail.objects.filter(is_popular__exact=True)
+        serializer = CocktailSerializer(cocktails, many=True)
+        return Response(serializer.data)

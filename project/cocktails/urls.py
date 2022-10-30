@@ -3,11 +3,13 @@ from rest_framework.urlpatterns import format_suffix_patterns
 from . import views
 
 urlpatterns = [
-    path('cocktails/', views.CocktailList.as_view()),
+    path('cocktails/popular', views.PopularCocktailList.as_view()),
+    # returns list of popular cocktails
+    path('cocktails', views.CocktailList.as_view()),
     # returns list of all cocktails
     path('cocktails/<int:pk>', views.CocktailDetail.as_view()),
     # returns single cocktail by id
-    path('ingredients/', views.IngredientList.as_view()),
+    path('ingredients', views.IngredientList.as_view()),
     # returns list of all ingredients
     path('ingredients/<int:pk>', views.IngredientDetail.as_view()),
     # returns single ingredient by id
@@ -20,7 +22,9 @@ urlpatterns = [
     # returns cocktail by its name
     path('ingredients/<str:name>', views.IngredientByName.as_view()),
     # returns ingredient by its name
-    # path('cocktails/<str:letter>', views.IngredientByName.as_view())
+    # path('cocktails/<str:letter>', views.CocktailByLetter.as_view()),
+
+
 
 ]
 
