@@ -23,6 +23,9 @@ urlpatterns = [
     path('ingredients/<str:name>', views.IngredientByName.as_view()),
     # returns ingredient by its name
     # path('cocktails/<str:letter>', views.CocktailByLetter.as_view()),
+    path('cocktails/search/<str:ingredient>',
+         views.CocktailByIngredient.as_view())
+
 
 
 

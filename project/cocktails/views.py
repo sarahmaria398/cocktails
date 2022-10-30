@@ -194,6 +194,23 @@ class IngredientByName(APIView):
         return Response(serializer.data)
 
 
+class PopularCocktailList(APIView):
+
+    def get(self, request):
+        cocktails = Cocktail.objects.filter(is_popular__exact=True)
+        serializer = CocktailSerializer(cocktails, many=True)
+        return Response(serializer.data)
+
+
+class CocktailByIngredient(APIView):
+
+    def get(self, request, ingredient):
+        cocktails = Cocktail.objects.filter(
+            ingredients__name__contains=ingredient)
+        serializer = CocktailSerializer(cocktails, many=True)
+        return Response(serializer.data)
+
+
 # class CocktailByLetter(APIView):
 
     #     def get_object(self, name):
@@ -217,10 +234,3 @@ class IngredientByName(APIView):
     #     cocktails = Cocktail.objects.all()
     #     serializer = CocktailSerializer(cocktails, many=True)
     #     return Response(serializer.data)
-
-class PopularCocktailList(APIView):
-
-    def get(self, request):
-        cocktails = Cocktail.objects.filter(is_popular__exact=True)
-        serializer = CocktailSerializer(cocktails, many=True)
-        return Response(serializer.data)
