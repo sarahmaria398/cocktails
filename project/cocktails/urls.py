@@ -25,11 +25,8 @@ urlpatterns = [
     # path('cocktails/<str:letter>', views.CocktailByLetter.as_view()),
     path('cocktails/search/<str:ingredient>',
          views.CocktailByIngredient.as_view())
-
-
-
+    # returns cocktails which match to the searched ingredient
 
 ]
-
 
 urlpatterns = format_suffix_patterns(urlpatterns)

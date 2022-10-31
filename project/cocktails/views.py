@@ -66,7 +66,21 @@ class IngredientList(APIView):
 class CocktailList(APIView):
 
     def get(self, request):
-        cocktails = Cocktail.objects.all()
+        categories = request.query_params
+        if len(categories) == 0:
+            cocktails = Cocktail.objects.all()
+        else:
+            glass = categories.get('glass', Cocktail.Glass.ANY)
+            is_popular = categories.get('is_popular', Cocktail.Popular.ANY)
+            is_alcoholic = categories.get(
+                'is_alcoholic', Cocktail.Alcoholic.ANY)
+            category = categories.get('category', Cocktail.Category.ANY)
+            cocktails = Cocktail.objects.filter(
+                glass__in=[Cocktail.Glass.ANY, glass],
+                is_popular__in=[Cocktail.Popular.ANY, is_popular],
+                is_alcoholic__in=[Cocktail.Alcoholic.ANY, is_alcoholic],
+                category__in=[Cocktail.Category.ANY, category]
+            )
         serializer = CocktailSerializer(cocktails, many=True)
         return Response(serializer.data)
 

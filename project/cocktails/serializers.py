@@ -31,9 +31,10 @@ class CocktailSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
     image = serializers.URLField()
     instructions = serializers.CharField(max_length=1000)
-    glass = serializers.CharField(max_length=200)
-    is_popular = serializers.BooleanField()
-    is_alcoholic = serializers.BooleanField(default=True)
+    glass = serializers.CharField(max_length=2, required=False)
+    is_popular = serializers.CharField(max_length=2)
+    is_alcoholic = serializers.CharField(max_length=2)
+    category = serializers.CharField(max_length=2, required=False)
     ingredients = IngredientSerializer(many=True)
 
     def create(self, validated_data):
