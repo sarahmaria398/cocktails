@@ -65,8 +65,22 @@ class IngredientList(APIView):
 
 class CocktailList(APIView):
 
-    def get(self, request):
-        cocktails = Cocktail.objects.all()
+    def get(self, request, *args, **kwargs):
+        categories = request.query_params
+
+        if len(categories) == 0:
+            cocktails = Cocktail.objects.all()
+        else:
+            is_popular = categories.get('is_popular', None)
+            is_alcoholic = categories.get('is_alcoholic', None)
+
+            if is_popular:
+                cocktails = Cocktail.objects.filter(is_popular__exact=True)
+            
+            if is_alcoholic:
+                cocktails = Cocktail.objects.filter(is_alcoholic__exact=True)
+
+
         serializer = CocktailSerializer(cocktails, many=True)
         return Response(serializer.data)
 
