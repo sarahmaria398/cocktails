@@ -11,6 +11,7 @@ class Cocktail(models.Model):
     is_alcoholic = models.BooleanField(default=True)
     ingredients = models.ManyToManyField(
         'Ingredient', related_name='ingredient', blank=True)
+    date_created = models.DateTimeField()
 
 
 class Ingredient(models.Model):

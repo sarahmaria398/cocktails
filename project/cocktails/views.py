@@ -65,8 +65,24 @@ class IngredientList(APIView):
 
 class CocktailList(APIView):
 
-    def get(self, request):
-        cocktails = Cocktail.objects.all()
+    def get(self, request, *args, **kwargs):
+        categories = request.query_params
+
+        if len(categories) == 0:
+            cocktails = Cocktail.objects.all()
+        else:
+            is_popular = categories.get('is_popular', None)
+            is_alcoholic = categories.get('is_alcoholic', None)
+            glass = categories.get('glass', None)
+            if is_popular:
+                cocktails = Cocktail.objects.filter(is_popular__exact=True)
+
+            if is_alcoholic:
+                cocktails = Cocktail.objects.filter(is_alcoholic__exact=True)
+
+            if glass:
+                cocktails = Cocktail.objects.filter(glass__icontains=glass)
+
         serializer = CocktailSerializer(cocktails, many=True)
         return Response(serializer.data)
 
@@ -211,26 +227,10 @@ class CocktailByIngredient(APIView):
         return Response(serializer.data)
 
 
-# class CocktailByLetter(APIView):
+class CocktailByLetter(APIView):
 
-    #     def get_object(self, name):
-    #     try:
-    #         return Cocktail.objects.get(name=name)
-    #     except Cocktail.DoesNotExist:
-    #         raise Http404
-
-    # def get(self, request, name):
-    #     cocktail = self.get_object(name)
-    #     serializer = CocktailSerializer(cocktail)
-    #     return Response(serializer.data)
-
-    # def get(self, request, letter):
-    #     cocktails = Cocktail.objects.filter('name').value()
-    #     # select = Cocktail.objects.get(cocktails=letter)
-    #     serializer = CocktailSerializer(cocktails, many=True)
-    #     return Response(serializer.data)
-
-    # def get(self, request):
-    #     cocktails = Cocktail.objects.all()
-    #     serializer = CocktailSerializer(cocktails, many=True)
-    #     return Response(serializer.data)
+    def get(self, request, letter):
+        cocktails = Cocktail.objects.filter(
+            name__startswith=letter)
+        serializer = CocktailSerializer(cocktails, many=True)
+        return Response(serializer.data)

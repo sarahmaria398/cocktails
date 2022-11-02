@@ -34,6 +34,7 @@ class CocktailSerializer(serializers.Serializer):
     glass = serializers.CharField(max_length=200)
     is_popular = serializers.BooleanField()
     is_alcoholic = serializers.BooleanField(default=True)
+    date_created = serializers.DateTimeField()
     ingredients = IngredientSerializer(many=True)
 
     def create(self, validated_data):
