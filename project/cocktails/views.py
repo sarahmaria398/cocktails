@@ -234,3 +234,11 @@ class CocktailByLetter(APIView):
             name__startswith=letter)
         serializer = CocktailSerializer(cocktails, many=True)
         return Response(serializer.data)
+
+
+class LatestCocktails(APIView):
+
+    def get(self, request):
+        cocktails = Cocktail.objects.order_by('-date_created')[:10]
+        serializer = CocktailSerializer(cocktails, many=True)
+        return Response(serializer.data)

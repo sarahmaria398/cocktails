@@ -52,6 +52,10 @@ class CocktailDetailSerializer(CocktailSerializer):
         instance.glass = validated_data.get('glass', instance.glass)
         instance.is_popular = validated_data.get(
             'is_popular', instance.is_popular)
+        instance.is_alcoholic = validated_data.get(
+            'is_alcoholic', instance.is_alcoholic)
+        instance.date_created = validated_data.get(
+            'date_created', instance.date_created)
         instance.save()
         return instance
 

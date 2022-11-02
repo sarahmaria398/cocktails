@@ -1,5 +1,6 @@
 
 from django.db import models
+from django.utils import timezone
 
 
 class Cocktail(models.Model):
@@ -11,7 +12,7 @@ class Cocktail(models.Model):
     is_alcoholic = models.BooleanField(default=True)
     ingredients = models.ManyToManyField(
         'Ingredient', related_name='ingredient', blank=True)
-    date_created = models.DateTimeField()
+    date_created = models.DateTimeField(default=timezone.now)
 
 
 class Ingredient(models.Model):
