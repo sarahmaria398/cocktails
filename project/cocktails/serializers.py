@@ -34,6 +34,7 @@ class CocktailSerializer(serializers.Serializer):
     glass = serializers.CharField(max_length=2, required=False)
     is_popular = serializers.CharField(max_length=2, required=False)
     is_alcoholic = serializers.CharField(max_length=2, required=False)
+    category = serializers.CharField(max_length=2, required=False)
     date_created = serializers.DateTimeField()
     # ingredients = IngredientSerializer(many=True) try required=False
 
@@ -54,6 +55,8 @@ class CocktailDetailSerializer(CocktailSerializer):
             'is_popular', instance.is_popular)
         instance.is_alcoholic = validated_data.get(
             'is_alcoholic', instance.is_alcoholic)
+        instance.category = validated_data.get(
+            'category', instance.category)
         instance.date_created = validated_data.get(
             'date_created', instance.date_created)
         instance.save()

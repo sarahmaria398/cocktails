@@ -74,14 +74,22 @@ class CocktailList(APIView):
             is_popular = categories.get('is_popular', None)
             is_alcoholic = categories.get('is_alcoholic', None)
             glass = categories.get('glass', None)
+            category = categories.get('category', None)
+
             if is_popular:
-                cocktails = Cocktail.objects.filter(is_popular__exact=True)
+                cocktails = Cocktail.objects.filter(
+                    is_popular__exact=is_popular)
 
             if is_alcoholic:
-                cocktails = Cocktail.objects.filter(is_alcoholic__exact=True)
+                cocktails = Cocktail.objects.filter(
+                    is_alcoholic__exact=is_alcoholic)
 
             if glass:
                 cocktails = Cocktail.objects.filter(glass__icontains=glass)
+
+            if category:
+                cocktails = Cocktail.objects.filter(
+                    category__icontains=category)
 
         serializer = CocktailSerializer(cocktails, many=True)
         return Response(serializer.data)
