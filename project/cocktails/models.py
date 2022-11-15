@@ -8,9 +8,6 @@ class Cocktail(models.Model):
     name = models.CharField(max_length=200)
     image = models.URLField()
     instructions = models.TextField()
-    # glass = models.CharField(max_length=200)
-    # is_popular = models.BooleanField()
-    # is_alcoholic = models.BooleanField(default=True)
 
     class Popular(models.TextChoices):
         ANY = 'AN', _('Any')

@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     path('cocktails/popular', views.PopularCocktailList.as_view()),
     # returns list of popular cocktails
-    path('cocktails/<str:letter>', views.CocktailByLetter.as_view()),
+    path('cocktails/by_letter/<str:letter>', views.CocktailByLetter.as_view()),
     # return list of cocktails starting with letter
     path('cocktails', views.CocktailList.as_view()),
     # returns list of all cocktails
@@ -18,7 +18,7 @@ urlpatterns = [
     path('cocktails/ingredients/<str:id1>/<str:id2>',
          views.CocktailIngredients.as_view()),
     #  parameter #1 is the ingredient id and param #2 is the cocktail id, adds or removes an ingredient from a cocktail
-    path('cocktails/random', views.CocktailRandom.as_view()),
+    path('cocktails/is/random', views.CocktailRandom.as_view()),
     # returns a random cocktail
     path('cocktails/<str:name>', views.CocktailByName.as_view()),
     # returns cocktail by its name

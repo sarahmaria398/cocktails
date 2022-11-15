@@ -31,11 +31,11 @@ class CocktailSerializer(serializers.Serializer):
     name = serializers.CharField(max_length=200)
     image = serializers.URLField()
     instructions = serializers.CharField(max_length=1000)
-    glass = serializers.CharField(max_length=200)
-    is_popular = serializers.BooleanField()
-    is_alcoholic = serializers.BooleanField(default=True)
+    glass = serializers.CharField(max_length=2, required=False)
+    is_popular = serializers.CharField(max_length=2, required=False)
+    is_alcoholic = serializers.CharField(max_length=2, required=False)
     date_created = serializers.DateTimeField()
-    # ingredients = IngredientSerializer(many=True)
+    # ingredients = IngredientSerializer(many=True) try required=False
 
     def create(self, validated_data):
         return Cocktail.objects.create(**validated_data)
