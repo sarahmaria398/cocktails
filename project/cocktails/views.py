@@ -133,6 +133,11 @@ class CocktailDetail(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+    def delete(self, request, pk):
+        cocktail = self.get_object(pk)
+        cocktail.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class CocktailIngredients(APIView):
 
