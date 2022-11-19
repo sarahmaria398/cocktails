@@ -77,13 +77,9 @@ class Cocktail(models.Model):
         default=Category.ANY
     )
 
-    # ingredients = models.ManyToManyField(
-    #     'Ingredient', related_name='ingredient', blank=True)
-    # ingredients = models.ForeignKey(
-    #     'Ingredient',
-    #     on_delete=models.CASCADE,
-    #     related_name='ingredient'
-    # )
+    ingredients = models.ManyToManyField(
+        'Ingredient', related_name='ingredient', blank=True)
+
     date_created = models.DateTimeField(default=timezone.now)
 
 
