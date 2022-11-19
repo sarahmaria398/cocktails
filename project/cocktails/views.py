@@ -7,6 +7,7 @@ from .models import Cocktail, Ingredient
 from .serializers import CocktailSerializer, CocktailDetailSerializer, IngredientDetailSerializer, IngredientSerializer
 from django.http import Http404
 from rest_framework import status
+from django.db.models import Q
 
 
 class IngredientDetail(APIView):
@@ -71,17 +72,54 @@ class CocktailList(APIView):
         if len(categories) == 0:
             cocktails = Cocktail.objects.all()
         else:
-            is_popular = categories.get('is_popular', None)
+            is_popular = categories.get('is_popular', Cocktail.Popular.ANY)
             is_alcoholic = categories.get(
-                'is_alcoholic', None)
-            glass = categories.get('glass', None)
-            category = categories.get('category', None)
+                'is_alcoholic', Cocktail.Alcoholic.ANY)
+            glass = categories.get('glass', Cocktail.Glass.ANY)
+            category = categories.get('category', Cocktail.Category.ANY)
+
+            # cocktails = Cocktail.objects.filter(Q(is_popular=is_popular)).filter(Q(
+            #     is_alcoholic=is_alcoholic)).filter(Q(glass=glass)).filter(Q(category=category))
+
+            cocktails = Cocktail.objects.filter(Q(is_popular=is_popular) and Q(
+                is_alcoholic=is_alcoholic) and Q(glass=glass) and Q(category=category))
+
+            # cocktails = Cocktail.objects.filter(
+            #     is_popular__exact=[Cocktail.Popular.ANY, is_popular],
+            #     is_alcoholic__exact=[Cocktail.Alcoholic.ANY, is_alcoholic],
+            #     glass__exact=[Cocktail.Glass.ANY, glass],
+            #     category__icontains=[Cocktail.Category.ANY, category]
+            # )
+
+            # cocktails = Cocktail.objects.filter(
+            #     is_popular__in=is_popular,
+            #     is_alcoholic__in=is_alcoholic,
+            #     glass__in=glass,
+            #     category__in=category
+            # )
+            # none type not iterable
+
+            # cocktails = Cocktail.objects.filter(category__in=[Cocktail.Category.ANY, category]).filter(
+            #     is_popular__in=[Cocktail.Popular.ANY, is_popular]).filter(is_alcoholic__in=[Cocktail.Alcoholic.ANY, is_alcoholic]).filter(glass__in=glass)
+
             cocktails = Cocktail.objects.filter(
-                is_popular__in=[Cocktail.Popular.ANY, is_popular],
-                is_alcoholic__in=[Cocktail.Alcoholic.ANY, is_alcoholic],
-                glass__in=[Cocktail.Glass.ANY, glass],
-                category__in=[Cocktail.Category.ANY, category]
-            )
+                is_popular__exact=is_popular).filter(is_alcoholic__exact=is_alcoholic).filter(category__in=category).filter(glass__icontains=glass)
+
+            # if is_alcoholic and is_popular and glass and category:
+            #     cocktails = Cocktail.objects.filter(
+            #         is_alcoholic__exact=is_alcoholic, is_popular__exact=is_popular, glass__in=glass, category__in=category)
+
+            # if is_alcoholic and is_popular:
+            #     cocktails = Cocktail.objects.filter(
+            #         is_alcoholic__exact=is_alcoholic, is_popular__exact=is_popular)
+
+            # if is_alcoholic and is_popular:
+            #     cocktails = Cocktail.objects.filter(
+            #         is_alcoholic__exact=is_alcoholic, is_popular__exact=is_popular)
+
+            # if is_alcoholic and is_popular:
+            #     cocktails = Cocktail.objects.filter(
+            #         is_alcoholic__exact=is_alcoholic, is_popular__exact=is_popular)
 
             # if is_alcoholic:
             #     cocktails = Cocktail.objects.filter(
@@ -90,9 +128,16 @@ class CocktailList(APIView):
             # if glass:
             #     cocktails = Cocktail.objects.filter(glass__icontains=glass)
 
-            # if category:
+            # if glass:
             #     cocktails = Cocktail.objects.filter(
-            #         glass__icontains=category)
+            #         glass__icontains=glass)
+
+            # if is_popular:
+            #     cocktails = Cocktail.objects.filter(
+            #         is_popular__exact=is_popular)
+
+            # these filters wont work, a user can select more than one filter, but if it doesnt meet
+            # a condition, will meet the next condition which may be only one parameter
 
         serializer = CocktailSerializer(cocktails, many=True)
         return Response(serializer.data)
