@@ -69,20 +69,46 @@ class CocktailList(APIView):
     def get(self, request, *args, **kwargs):
         categories = request.query_params
 
-        if len(categories) == 0:
-            cocktails = Cocktail.objects.all()
-        else:
-            is_popular = categories.get('is_popular', Cocktail.Popular.ANY)
-            is_alcoholic = categories.get(
-                'is_alcoholic', Cocktail.Alcoholic.ANY)
-            glass = categories.get('glass', Cocktail.Glass.ANY)
-            category = categories.get('category', Cocktail.Category.ANY)
+        qs = Cocktail.objects.all()  # using qs as a conventional variable for a queryset
+
+        is_popular = categories.get('is_popular')
+        if categories.get('is_popular'):
+            qs = qs.filter(is_popular=is_popular)
+        # if not is_popular:
+        #     qs = qs.filter(is_popular='AN')
+
+        is_alcoholic = categories.get('is_alcoholic')
+        if categories.get('is_alcoholic'):
+            qs = qs.filter(is_alcoholic=is_alcoholic)
+        # if not is_alcoholic:
+        #     qs = qs.filter(is_alcoholic='AN')
+
+        glass = categories.get('glass')
+        if glass:
+            qs = qs.filter(glass=glass)
+        # if not glass:
+        #     qs = qs.filter(glass='AN')
+
+        category = categories.get('category')
+        if category:
+            qs = qs.filter(category=category)
+        # if not category:
+            # qs = qs.filter(category='AN')
+
+        # if len(categories) == 0:
+        #     cocktails = Cocktail.objects.all()
+        # else:
+        #     is_popular = categories.get('is_popular', Cocktail.Popular.ANY)
+        #     is_alcoholic = categories.get(
+        #         'is_alcoholic', Cocktail.Alcoholic.ANY)
+        #     glass = categories.get('glass', Cocktail.Glass.ANY)
+        #     category = categories.get('category', Cocktail.Category.ANY)
 
             # cocktails = Cocktail.objects.filter(Q(is_popular=is_popular)).filter(Q(
             #     is_alcoholic=is_alcoholic)).filter(Q(glass=glass)).filter(Q(category=category))
 
-            cocktails = Cocktail.objects.filter(Q(is_popular=is_popular) and Q(
-                is_alcoholic=is_alcoholic) and Q(glass=glass) and Q(category=category))
+            # cocktails = Cocktail.objects.filter(Q(is_popular=is_popular) and Q(
+            #     is_alcoholic=is_alcoholic) and Q(glass=glass) and Q(category=category))
 
             # cocktails = Cocktail.objects.filter(
             #     is_popular__exact=[Cocktail.Popular.ANY, is_popular],
@@ -102,8 +128,8 @@ class CocktailList(APIView):
             # cocktails = Cocktail.objects.filter(category__in=[Cocktail.Category.ANY, category]).filter(
             #     is_popular__in=[Cocktail.Popular.ANY, is_popular]).filter(is_alcoholic__in=[Cocktail.Alcoholic.ANY, is_alcoholic]).filter(glass__in=glass)
 
-            cocktails = Cocktail.objects.filter(
-                is_popular__exact=is_popular).filter(is_alcoholic__exact=is_alcoholic).filter(category__in=category).filter(glass__icontains=glass)
+            # cocktails = Cocktail.objects.filter(
+            #     is_popular__exact=is_popular).filter(is_alcoholic__exact=is_alcoholic).filter(category__in=category).filter(glass__icontains=glass)
 
             # if is_alcoholic and is_popular and glass and category:
             #     cocktails = Cocktail.objects.filter(
@@ -139,7 +165,7 @@ class CocktailList(APIView):
             # these filters wont work, a user can select more than one filter, but if it doesnt meet
             # a condition, will meet the next condition which may be only one parameter
 
-        serializer = CocktailSerializer(cocktails, many=True)
+        serializer = CocktailSerializer(qs, many=True)
         return Response(serializer.data)
 
     def post(self, request):
