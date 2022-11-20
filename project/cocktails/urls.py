@@ -6,7 +6,7 @@ urlpatterns = [
     path('cocktails/popular', views.PopularCocktailList.as_view()),
     # returns list of popular cocktails
     path('cocktails/by_letter/<str:letter>', views.CocktailByLetter.as_view()),
-    # return list of cocktails starting with letter
+    # return list of cocktails starting with a letter
     path('cocktails', views.CocktailList.as_view()),
     # returns list of all cocktails
     path('cocktails/<int:pk>', views.CocktailDetail.as_view()),
