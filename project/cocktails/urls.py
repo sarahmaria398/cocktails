@@ -20,13 +20,13 @@ urlpatterns = [
     #  parameter #1 is the ingredient id and param #2 is the cocktail id, adds or removes an ingredient from a cocktail
     path('cocktails/is/random', views.CocktailRandom.as_view()),
     # returns a random cocktail
-    path('cocktails/<str:name>', views.CocktailByName.as_view()),
+    path('cocktails/name/<str:name>', views.CocktailByName.as_view()),
     # returns cocktail by its name
     path('ingredients/<str:name>', views.IngredientByName.as_view()),
     # returns ingredient by its name
     path('cocktails/search/<str:ingredient>',
          views.CocktailByIngredient.as_view()),
-    # return cocktails by included ingredient
+    # return cocktails by selected ingredient
     path('latest',
          views.LatestCocktails.as_view())
 ]

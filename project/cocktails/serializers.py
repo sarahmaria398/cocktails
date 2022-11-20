@@ -35,7 +35,7 @@ class CocktailSerializer(serializers.Serializer):
     is_popular = serializers.CharField(max_length=2, required=False)
     is_alcoholic = serializers.CharField(max_length=2, required=False)
     category = serializers.CharField(max_length=2, required=False)
-    date_created = serializers.DateTimeField()
+    date_created = serializers.DateTimeField(required=False)
     ingredients = IngredientSerializer(many=True, required=False)
 
     def create(self, validated_data):
@@ -43,7 +43,7 @@ class CocktailSerializer(serializers.Serializer):
 
 
 class CocktailDetailSerializer(CocktailSerializer):
-    # ingredients = IngredientSerializer(many=True, read_only=True)
+    ingredients = IngredientSerializer(many=True, read_only=True)
 
     def update(self, instance, validated_data):
         instance.name = validated_data.get('name', instance.name)

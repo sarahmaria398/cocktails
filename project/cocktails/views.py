@@ -25,6 +25,8 @@ class IngredientDetail(APIView):
         serializer = IngredientDetailSerializer(ingredient)
         return Response(serializer.data)
 
+    # get single ingredient by pk
+
     def put(self, request, pk):
         ingredient = self.get_object(pk)
         data = request.data
@@ -45,6 +47,7 @@ class IngredientDetail(APIView):
             serializer.errors,
             status=status.HTTP_400_BAD_REQUEST
         )
+    # update the ingredient object by pk
 
 
 class IngredientList(APIView):
@@ -53,6 +56,7 @@ class IngredientList(APIView):
         ingredients = Ingredient.objects.all()
         serializer = IngredientSerializer(ingredients, many=True)
         return Response(serializer.data)
+    # return list of all ingredients
 
     def post(self, request):
         serializer = IngredientSerializer(data=request.data)
@@ -62,6 +66,7 @@ class IngredientList(APIView):
                             )
         return Response(serializer.data, status=status.HTTP_400_BAD_REQUEST
                         )
+    # post a new ingredient to the list of ingredients
 
 
 class CocktailList(APIView):
@@ -101,6 +106,8 @@ class CocktailList(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+        # post a new cocktail
+
 
 class CocktailDetail(APIView):
 
@@ -114,6 +121,8 @@ class CocktailDetail(APIView):
         cocktail = self.get_object(pk)
         serializer = CocktailSerializer(cocktail)
         return Response(serializer.data)
+
+        # get a single cocktail by pk
 
     def put(self, request, pk):
         cocktail = self.get_object(pk)
@@ -136,13 +145,18 @@ class CocktailDetail(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+        # update a single cocktail by pk
+
     def delete(self, request, pk):
         cocktail = self.get_object(pk)
         cocktail.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+        # delete a cocktail by pk
+
 
 class CocktailIngredients(APIView):
+    # post an ingredient object to a cocktail object, and also be able to remove it from the cocktail object
 
     def get_object(self, id1):
         try:
@@ -169,6 +183,8 @@ class CocktailIngredients(APIView):
             status=status.HTTP_400_BAD_REQUEST
         )
 
+        # if the ingredient is not already in the ingredients field in the cocktail object, add it
+
     def delete(self, request, id1, id2):
         ingredient = self.get_object(id1)
         cocktail = self.get_object_cocktail(id2)
@@ -179,9 +195,11 @@ class CocktailIngredients(APIView):
         return Response(
             status=status.HTTP_400_BAD_REQUEST
         )
+    # if the ingredient is in the ingredients field in the cocktail object, remove it
 
 
 class CocktailRandom(APIView):
+    # return a random cocktail
 
     def get(self, request):
         id = random.randint(1, len(Cocktail.objects.all()))
@@ -191,6 +209,7 @@ class CocktailRandom(APIView):
 
 
 class CocktailByName(APIView):
+    # return a cocktail by its name
 
     def get_object(self, name):
         try:
@@ -205,6 +224,7 @@ class CocktailByName(APIView):
 
 
 class IngredientByName(APIView):
+    # return an ingredient by its name
 
     def get_object(self, name):
         try:
@@ -228,6 +248,7 @@ class PopularCocktailList(APIView):
 
 
 class CocktailByIngredient(APIView):
+    # return a list of cocktails which have an ingredient in it which has been selected
 
     def get(self, request, ingredient):
         cocktails = Cocktail.objects.filter(
@@ -237,6 +258,7 @@ class CocktailByIngredient(APIView):
 
 
 class CocktailByLetter(APIView):
+    # return list of cocktails which start with the selected letter
 
     def get(self, request, letter):
         cocktails = Cocktail.objects.filter(

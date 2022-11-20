@@ -1,6 +1,7 @@
 
 from django.db import models
 from django.utils import timezone
+from datetime import datetime
 from django.utils.translation import gettext as _
 
 
@@ -80,7 +81,7 @@ class Cocktail(models.Model):
     ingredients = models.ManyToManyField(
         'Ingredient', related_name='ingredient', blank=True)
 
-    date_created = models.DateTimeField(default=timezone.now)
+    date_created = models.DateTimeField(default=datetime.now, blank=True)
 
 
 class Ingredient(models.Model):
