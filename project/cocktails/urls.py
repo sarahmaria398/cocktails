@@ -18,7 +18,7 @@ urlpatterns = [
     path('cocktails/ingredients/<str:id1>/<str:id2>',
          views.CocktailIngredients.as_view()),
     #  parameter #1 is the ingredient id and param #2 is the cocktail id, adds or removes an ingredient from a cocktail
-    path('cocktails/is/random', views.CocktailRandom.as_view()),
+    path('random', views.CocktailRandom.as_view()),
     # returns a random cocktail
     path('cocktails/name/<str:name>', views.CocktailByName.as_view()),
     # returns cocktail by its name
