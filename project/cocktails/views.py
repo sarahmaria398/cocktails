@@ -252,7 +252,7 @@ class CocktailByIngredient(APIView):
 
     def get(self, request, ingredient):
         cocktails = Cocktail.objects.filter(
-            ingredients__name__contains=ingredient)
+            ingredients__name__exact=ingredient)
         serializer = CocktailSerializer(cocktails, many=True)
         return Response(serializer.data)
 
