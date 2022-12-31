@@ -202,10 +202,20 @@ class CocktailRandom(APIView):
     # return a random cocktail
 
     def get(self, request):
-        id = random.randint(1, len(Cocktail.objects.all()))
-        cocktail = Cocktail.objects.get(pk=id)
-        serializer = CocktailSerializer(cocktail)
-        return Response(serializer.data)
+
+        id = random.randint(1, len(Cocktail.objects.filter(name__isnull=False)))
+        if Cocktail.objects.filter(pk=id).exists():
+            cocktails = Cocktail.objects.get(pk=id)
+            serializer = CocktailSerializer(cocktails)
+            return Response(serializer.data)
+        else:
+            cocktails = Cocktail.objects.get(pk=1)
+            serializer = CocktailSerializer(cocktails)
+            return Response(serializer.data)
+        
+        #a poor fix to the issue of returning non existant database items as the object has been deleted. 
+        #currently, if object pk does not exist, if will return the first object in database, with pk 1
+        #the queryset also is only based on the number of objects in the database, therefore not including objects with a higher pk number
 
 
 class CocktailByName(APIView):
