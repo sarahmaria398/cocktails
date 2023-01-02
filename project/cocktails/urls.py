@@ -28,7 +28,10 @@ urlpatterns = [
          views.CocktailByIngredient.as_view()),
     # return cocktails by selected ingredient
     path('latest',
-         views.LatestCocktails.as_view())
+         views.LatestCocktails.as_view()),
+     #return top 10 latest cocktails added to db
+     path('10/random', views.CocktailRandomTen.as_view()),
+     #return random 10 cocktails
 ]
 
 

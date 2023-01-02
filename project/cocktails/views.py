@@ -203,12 +203,18 @@ class CocktailRandom(APIView):
 
     def get(self, request):
 
-        id = random.randint(1, len(Cocktail.objects.filter(name__isnull=False)))
+        id = random.randint(1, len(Cocktail.objects.all()))
         if Cocktail.objects.filter(pk=id).exists():
             cocktails = Cocktail.objects.get(pk=id)
             serializer = CocktailSerializer(cocktails)
             return Response(serializer.data)
         else:
+            # list= []
+            # for i in Cocktail.objects.all():
+            #     list.append(i)
+            # item = list[0][0]
+            # tried top put all objects in an array to reference the first object that exists, and its pk but object not subscriptable
+
             cocktails = Cocktail.objects.get(pk=1)
             serializer = CocktailSerializer(cocktails)
             return Response(serializer.data)
@@ -284,3 +290,32 @@ class LatestCocktails(APIView):
         cocktails = Cocktail.objects.order_by('-date_created')[:10]
         serializer = CocktailSerializer(cocktails, many=True)
         return Response(serializer.data)
+
+class CocktailRandomTen(APIView):
+    # return 10 random cocktails
+
+    def get(self, request):
+
+        list = []
+
+        for i in range(10):
+            id = random.randint(1, len(Cocktail.objects.all()))
+            list.append(id)
+        
+        cocktail_list = []
+
+        for i in list:
+            if Cocktail.objects.filter(pk=i).exists():
+                cocktails = Cocktail.objects.get(pk=i)
+                cocktail_list.append(cocktails)
+            else:
+                cocktails = Cocktail.objects.get(pk=1)
+                cocktail_list.append(cocktails)
+        serializer = CocktailSerializer(cocktail_list, many=True)
+        return Response(serializer.data)
+
+    # as the same issue with returning a single random cocktail:
+    # 1. we are only getting a range o random numbers according to how many objects are in the database, 
+    # not the highest of pk numbers for the objects, and missing out on a range of objects
+    # 2. if the object does not exist, we are defaulting to object with pk 1
+    
